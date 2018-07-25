@@ -23,93 +23,7 @@ L.mapbox.accessToken = 'pk.eyJ1IjoidGhld2FyZCIsImEiOiItZmM1NVp3In0.MRoiuzp1QVLEw
 var map = L.mapbox.map('map', 'mapbox.streets')
     .setView([5, 22], 3);
 
-var westTopo = L.mapbox.featureLayer()
-  .loadURL('topo_own.geojson')
-  .on('ready', function(layer){
-// style the polygon
-    westTopo.setStyle({fillColor: "#ff69b4", weight: .5, fillOpacity: 0.6})
-//add popup
-    westTopo.eachLayer(function(layer) {
-      var topoText = '<h2> Sheet name: ' + layer.feature.properties.Sheet_name + '</h2>' + '<br \/>' + "Sheet title: " + layer.feature.properties.Sheet_Titles + '<br \/>' + "Year: " + layer.feature.properties.Sheet_Year + '<br \/>' + "Publisher: " + layer.feature.properties.PUB + '<br \/>' + "Map Set: " + layer.feature.properties.Map_Set + '<br \/>' +
-      'Access: ' + layer.feature.properties.Access ;
-      layer.bindPopup(topoText);
-    });
-  })
-  .addTo(map);
 
-var zambia = L.mapbox.featureLayer()
-      .loadURL('zambia.geojson')
-      .on('ready', function() {
-        zambia.setStyle({fillColor: "#ffa500", weight: .5, fillOpacity: 0.6})
-          zambia.eachLayer(function(layer) {
-            var zambiaText = '<h2> Sheet name: ' + layer.feature.properties.Sheet + '</h2><br \/>' + "<a href='" + layer.feature.properties.link + "' >Link to cropped map</a>"+ '<br \/>' + "<a href='" + layer.feature.properties.link_full + "' >Link to full map</a>" +  '<br \/>' + "Access: " + layer.feature.properties.Access;
-            layer.bindPopup(zambiaText);
-          });
-        })
-      .addTo(map);
-
-var continent = L.mapbox.featureLayer()
-    .loadURL('APC_continent.geojson')
-    .on('ready', function(){
-      continent.setStyle({fill: false})
-      continent.eachLayer(function(layer) {
-        var regionText = '<strong>Poster name: </strong>' + layer.feature.properties.TITLE + '<br \/>' + "<a href='" + layer.feature.properties.LINK + "' >Link to poster index</a>";
-        layer.bindPopup(regionText);
-      });
-
-    })
-    .addTo(map);
-
-
-
-var region = L.mapbox.featureLayer()
-    .loadURL('APC_region.geojson')
-    .on('ready', function(){
-      region.setStyle({fillColor: 'white', weight: .5, fillOpactiy: 0.6})
-      region.eachLayer(function(layer) {
-        var regionText = '<strong>Poster name: </strong>' + layer.feature.properties.TITLE + '<br \/>' + "<a href='" + layer.feature.properties.LINK + "' >Link to poster index</a>";
-        layer.bindPopup(regionText);
-      });
-
-    })
-    .addTo(map);
-
-var natural = L.mapbox.featureLayer()
-    .loadURL('APC_natural.geojson')
-    .on('ready', function(){
-      natural.setStyle({fillColor: 'white', weight: .5, fillOpactiy: 0.6})
-      natural.eachLayer(function(layer) {
-        var regionText = '<strong>Poster name: </strong>' + layer.feature.properties.TITLE + '<br \/>' + "<a href='" + layer.feature.properties.LINK + "' >Link to poster index</a>";
-        layer.bindPopup(regionText);
-      });
-
-    })
-    .addTo(map);
-var country = L.mapbox.featureLayer()
-    .loadURL('APC_country.geojson')
-    .on('ready', function(){
-      country.setStyle({fillColor: 'white', weight: .5, fillOpactiy: 0.6})
-      country.eachLayer(function(layer) {
-        var regionText = '<strong>Poster name: </strong>' + layer.feature.properties.TITLE + '<br \/>' + "<a href='" + layer.feature.properties.LINK + "' >Link to poster index</a>";
-        layer.bindPopup(regionText);
-      });
-
-    })
-    .addTo(map);
-
-
-
-var city = L.mapbox.featureLayer()
-   .loadURL('APC_city.geojson')
-   .on('ready', function(){
-     city.setStyle({fillColor: 'white', weight: .5, fillOpactiy: 0.6})
-     city.eachLayer(function(layer) {
-       var regionText = '<strong>Poster name: </strong>' + layer.feature.properties.TITLE + '<br \/>' + "<a href='" + layer.feature.properties.LINK + "' >Link to poster index</a>";
-       layer.bindPopup(regionText);
-     });
-
-   })
-    .addTo(map);
 
     var tubman = L.mapbox.featureLayer()
         .loadURL('image_tubman.geojson')
@@ -222,13 +136,7 @@ var city = L.mapbox.featureLayer()
             });
 
 L.control.layers({
-  "West Africa Topographic Maps": westTopo,
-  "Zambia Topographic Maps": zambia,
-  "Africa Poster Collection - Continent": continent,
-  "Africa Poster Collection - Countries": country,
-  "Africa Poster Collection - Regions": region,
-  "Africa Poster Collection - Natural Features": natural,
-  "Africa Poster Collection - Cities": city,
+  
   "Tubman Photo Collection": tubman,
   "Whitten Photo Collection": whitten,
   "McEvoy Photo Collection": mcevoy,
