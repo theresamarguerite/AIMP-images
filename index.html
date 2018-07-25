@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset=utf-8 />
+<title>Africa Image and Map Portal</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.js'></script>
+
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/leaflet.markercluster.js'></script>
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.css' rel='stylesheet' />
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v1.0.0/MarkerCluster.Default.css' rel='stylesheet' />
+
+<link href='https://api.mapbox.com/mapbox.js/v3.1.1/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
+</head>
+<body>
+<div id='map'></div>
+<script>
+L.mapbox.accessToken = 'pk.eyJ1IjoidGhld2FyZCIsImEiOiItZmM1NVp3In0.MRoiuzp1QVLEw1G-Xm3S3Q';
+var map = L.mapbox.map('map', 'mapbox.streets')
+    .setView([5, 22], 3);
+
+var westTopo = L.mapbox.featureLayer()
+  .loadURL('topo_own.geojson')
+  .on('ready', function(layer){
+// style the polygon
+    westTopo.setStyle({fillColor: "#ff69b4", weight: .5, fillOpacity: 0.6})
+//add popup
+    westTopo.eachLayer(function(layer) {
+      var topoText = '<h2> Sheet name: ' + layer.feature.properties.Sheet_name + '</h2>' + '<br \/>' + "Sheet title: " + layer.feature.properties.Sheet_Titles + '<br \/>' + "Year: " + layer.feature.properties.Sheet_Year + '<br \/>' + "Publisher: " + layer.feature.properties.PUB + '<br \/>' + "Map Set: " + layer.feature.properties.Map_Set + '<br \/>' +
+      'Access: ' + layer.feature.properties.Access ;
+      layer.bindPopup(topoText);
+    });
+  })
+  .addTo(map);
+
+var zambia = L.mapbox.featureLayer()
+      .loadURL('zambia.geojson')
+      .on('ready', function() {
+        zambia.setStyle({fillColor: "#ffa500", weight: .5, fillOpacity: 0.6})
+          zambia.eachLayer(function(layer) {
+            var zambiaText = '<h2> Sheet name: ' + layer.feature.properties.Sheet + '</h2><br \/>' + "<a href='" + layer.feature.properties.link + "' >Link to cropped map</a>"+ '<br \/>' + "<a href='" + layer.feature.properties.link_full + "' >Link to full map</a>" +  '<br \/>' + "Access: " + layer.feature.properties.Access;
+            layer.bindPopup(zambiaText);
+          });
+        })
+      .addTo(map);
+
+var continent = L.mapbox.featureLayer()
+    .loadURL('APC_continent.geojson')
+    .on('ready', function(){
+      continent.setStyle({fill: false})
+      continent.eachLayer(function(layer) {
+        var regionText = '<strong>Poster name: </strong>' + layer.feature.properties.TITLE + '<br \/>' + "<a href='" + layer.feature.properties.LINK + "' >Link to poster index</a>";
+        layer.bindPopup(regionText);
+      });
+
+    })
+    .addTo(map);
+
+
+
+var region = L.mapbox.featureLayer()
+    .loadURL('APC_region.geojson')
+    .on('ready', function(){
+      region.setStyle({fillColor: 'white', weight: .5, fillOpactiy: 0.6})
+      region.eachLayer(function(layer) {
+        var regionText = '<strong>Poster name: </strong>' + layer.feature.properties.TITLE + '<br \/>' + "<a href='" + layer.feature.properties.LINK + "' >Link to poster index</a>";
+        layer.bindPopup(regionText);
+      });
+
+    })
+    .addTo(map);
+
+var natural = L.mapbox.featureLayer()
+    .loadURL('APC_natural.geojson')
+    .on('ready', function(){
+      natural.setStyle({fillColor: 'white', weight: .5, fillOpactiy: 0.6})
+      natural.eachLayer(function(layer) {
+        var regionText = '<strong>Poster name: </strong>' + layer.feature.properties.TITLE + '<br \/>' + "<a href='" + layer.feature.properties.LINK + "' >Link to poster index</a>";
+        layer.bindPopup(regionText);
+      });
+
+    })
+    .addTo(map);
+var country = L.mapbox.featureLayer()
+    .loadURL('APC_country.geojson')
+    .on('ready', function(){
+      country.setStyle({fillColor: 'white', weight: .5, fillOpactiy: 0.6})
+      country.eachLayer(function(layer) {
+        var regionText = '<strong>Poster name: </strong>' + layer.feature.properties.TITLE + '<br \/>' + "<a href='" + layer.feature.properties.LINK + "' >Link to poster index</a>";
+        layer.bindPopup(regionText);
+      });
+
+    })
+    .addTo(map);
+
+
+
+var city = L.mapbox.featureLayer()
+   .loadURL('APC_city.geojson')
+   .on('ready', function(){
+     city.setStyle({fillColor: 'white', weight: .5, fillOpactiy: 0.6})
+     city.eachLayer(function(layer) {
+       var regionText = '<strong>Poster name: </strong>' + layer.feature.properties.TITLE + '<br \/>' + "<a href='" + layer.feature.properties.LINK + "' >Link to poster index</a>";
+       layer.bindPopup(regionText);
+     });
+
+   })
+    .addTo(map);
+
+    var tubman = L.mapbox.featureLayer()
+        .loadURL('image_tubman.geojson')
+        .on('ready', function(e) {
+    // The clusterGroup gets each marker in the group added to it
+    // once loaded, and then is added to the map
+    var clusterGroup = new L.MarkerClusterGroup({
+
+      polygonOptions: {
+        fillColor: '#7ef9ff',
+        color: '#7ef9ff',
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 0.5
+      }
+    });
+    e.target.eachLayer(function(layer) {
+      clusterGroup.addLayer(layer);
+    });
+    map.addLayer(clusterGroup);
+
+
+        tubman.eachLayer(function(layer) {
+          var imageText = '<strong>Title: </strong>' + layer.feature.properties.title + '<br \/>' + "<a href='" + layer.feature.properties.id + "' >Link to image</a>";
+          layer.bindPopup(imageText);
+        });
+});
+
+
+
+        var whitten = L.mapbox.featureLayer()
+            .loadURL('image_whitten.geojson')
+            .on('ready', function(e) {
+        // The clusterGroup gets each marker in the group added to it
+        // once loaded, and then is added to the map
+        var clusterGroup = new L.MarkerClusterGroup({
+
+          polygonOptions: {
+            fillColor: '#7ef9ff',
+            color: '#7ef9ff',
+            weight: 2,
+            opacity: 1,
+            fillOpacity: 0.5
+          }
+        });
+        e.target.eachLayer(function(layer) {
+          clusterGroup.addLayer(layer);
+        });
+        map.addLayer(clusterGroup);
+
+
+            whitten.eachLayer(function(layer) {
+              var imageText = '<strong>Title: </strong>' + layer.feature.properties.title + '<br \/>' + "<a href='" + layer.feature.properties.id + "' >Link to image</a>";
+              layer.bindPopup(imageText);
+            });
+    });
+
+  var mcevoy = L.mapbox.featureLayer()
+                .loadURL('image_mcevoy.geojson')
+                .on('ready', function(e) {
+            // The clusterGroup gets each marker in the group added to it
+            // once loaded, and then is added to the map
+            var clusterGroup = new L.MarkerClusterGroup({
+
+              polygonOptions: {
+                fillColor: '#7ef9ff',
+                color: '#7ef9ff',
+                weight: 2,
+                opacity: 1,
+                fillOpacity: 0.5
+              }
+            });
+            e.target.eachLayer(function(layer) {
+              clusterGroup.addLayer(layer);
+            });
+            map.addLayer(clusterGroup);
+
+
+                mcevoy.eachLayer(function(layer) {
+                  var imageText = '<strong>Title: </strong>' + layer.feature.properties.title + '<br \/>' + "<a href='" + layer.feature.properties.id + "' >Link to image</a>";
+                  layer.bindPopup(imageText);
+                });
+        });
+
+  var clark = L.mapbox.featureLayer()
+                    .loadURL('image_clark.geojson')
+                    .on('ready', function(e) {
+                // The clusterGroup gets each marker in the group added to it
+                // once loaded, and then is added to the map
+                var clusterGroup = new L.MarkerClusterGroup({
+
+                  polygonOptions: {
+                    fillColor: '#7ef9ff',
+                    color: '#7ef9ff',
+                    weight: 2,
+                    opacity: 1,
+                    fillOpacity: 0.5
+                  }
+                });
+                e.target.eachLayer(function(layer) {
+                  clusterGroup.addLayer(layer);
+                });
+                map.addLayer(clusterGroup);
+
+
+                    clark.eachLayer(function(layer) {
+                      var imageText = '<strong>Title: </strong>' + layer.feature.properties.title + '<br \/>' + "<a href='" + layer.feature.properties.id + "' >Link to image</a>";
+                      layer.bindPopup(imageText);
+                    });
+            });
+
+L.control.layers({
+  "West Africa Topographic Maps": westTopo,
+  "Zambia Topographic Maps": zambia,
+  "Africa Poster Collection - Continent": continent,
+  "Africa Poster Collection - Countries": country,
+  "Africa Poster Collection - Regions": region,
+  "Africa Poster Collection - Natural Features": natural,
+  "Africa Poster Collection - Cities": city,
+  "Tubman Photo Collection": tubman,
+  "Whitten Photo Collection": whitten,
+  "McEvoy Photo Collection": mcevoy,
+  "Clark Photo Collection": clark,
+}).addTo(map);
+
+map.legendControl.addLegend('<strong>Africa Image and Map Portal </strong><br\/> Click on the layer selector in the top right corner to explore maps, posters, and images from the <a href="https://libraries.indiana.edu/african-studies">Indiana University African Studies Collection</a>');
+</script>
+</body>
+</html>
